@@ -1,0 +1,18 @@
+{%  extends 'feetcode/main.html' %}
+
+{% block content %}
+
+<h1 align="center">Problem Set</h1>
+
+<hr></hr>
+{% if problem_list %}
+    <ol>
+    {% for problem in problem_list %}
+        <li><a href="/feetcode/{{ problem.id }}/">{{ problem.name }}</a></li>
+    {% endfor %}
+    </ol>
+{% else %}
+    <p>No problems are available.</p>
+{% endif %}
+
+{% endblock %}

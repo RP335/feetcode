@@ -1,0 +1,33 @@
+{%  extends 'feetcode/main.html' %}
+
+{% block content %}
+<h1 align="center"> {{problem.id}}:{{problem.name}} </h1>
+   <p align="center">
+       input: standard input<br>
+       output: standard output<br>
+   </p>
+
+
+<p>
+   {{problem.statement}}
+</p>
+<form  action="{% url 'submit' problem.id %}" enctype="multipart/form-data" method="post">
+   {% csrf_token %}
+   <fieldset>
+       <center><b>Submit your code<b></center>
+       <HR>
+       <div align="center">
+           <label for="language" >Choose a Language:</label>
+           <select id="language" name="language">
+               <option id="java" name="java">Java</option>
+               <option id="python" name="python">Python</option>
+           </select>
+           <br></br>
+           <textarea rows="20" cols="100" id="solution" name="solution">{{ problem.code}}</textarea><br><br/>
+           <input type="submit"  value="Submit">
+           <br></br>
+       </div>
+   </fieldset>
+</form>
+
+{% endblock %}
