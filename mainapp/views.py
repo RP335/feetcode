@@ -72,7 +72,7 @@ def submit(request, problem_id):
     s = subprocess.check_output('docker ps', shell=True)
     strPath = os.getcwd()
     print(strPath)
-    if (language == "C++"):
+    if (language == "Java"):
         if s.find(str.encode('java-container')) == -1:
             subprocess.run(f'docker run -d -it --name java-container -v {strPath}:/home/:ro openjdk', shell=True)
     if (language == "Python"):
