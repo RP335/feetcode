@@ -69,14 +69,23 @@ def submit(request, problem_id):
     elif language == "Python":
         temp_py.write(str.encode(code))
         temp_py.seek(0)
+    s = subprocess.check_output('docker ps', shell=True)
+    strPath = os.getcwd()
+    print(strPath)
+    if (language == "C++"):
+        if s.find(str.encode('java-container')) == -1:
+            subprocess.run(f'docker run -d -it --name java-container -v {strPath}:/home/:ro openjdk', shell=True)
+    if (language == "Python"):
+        if s.find(str.encode('python-container')) == -1:
+            subprocess.run(f'docker run -d -it --name python-container -v {strPath}:/home/:ro python', shell=True)     
 
-    print("thing")
+    print("test1")
     strPath = os.getcwd()
     print(strPath)
     problem = get_object_or_404(Problem, pk=problem_id)
     testcase = problem.testcase_set.all()
     if language == 'Java':
-        subprocess.run('javac ' + os.path.basename(temp_java.name), shell = True)
+        subprocess.run('docker exec java-container javac /home/'+ os.path.basename(temp_java.name), shell=True)
     
     for i in testcase:
         inp = open ('/Users/rahul_peter/Documents/webdev-practice/feetCode/items/inp.txt', "wb+")
@@ -86,11 +95,14 @@ def submit(request, problem_id):
         actual_out = open ('/Users/rahul_peter/Documents/webdev-practice/feetCode/items/actual_out.txt', "wb+")
         actual_out.write(str.encode(i.output))
         actual_out.seek(0)
-
-        if language == 'Java':
-            subprocess.run('java ' + temp_java2.name + ' < /Users/rahul_peter/Documents/webdev-practice/feetCode/items/inp.txt > /Users/rahul_peter/Documents/webdev-practice/feetCode/items/out.txt', shell = True )
-        elif language == 'Python':
-            subprocess.run('python ' + os.path.basename(temp_py.name)  + ' < /Users/rahul_peter/Documents/webdev-practice/feetCode/items/inp.txt > /Users/rahul_peter/Documents/webdev-practice/feetCode/items/out.txt', shell = True)
+        if (language == "Java"):
+            subprocess.run('docker exec -i java-container java < /Users/rahul_peter/Documents/webdev-practice/feetCode/items/inp.txt > /Users/rahul_peter/Documents/webdev-practice/feetCode/items/out.txt', shell=True)
+        elif (language == "Python"):
+            subprocess.run("docker exec -i python-container python /home/"+ os.path.basename(temp_py.name)+ ' < /Users/rahul_peter/Documents/webdev-practice/feetCode/items/inp.txt > /Users/rahul_peter/Documents/webdev-practice/feetCode/items/out.txt', shell=True)
+        # if language == 'Java':
+        #     subprocess.run('java ' + temp_java2.name + ' < /Users/rahul_peter/Documents/webdev-practice/feetCode/items/inp.txt > /Users/rahul_peter/Documents/webdev-practice/feetCode/items/out.txt', shell = True )
+        # elif language == 'Python':
+        #     subprocess.run('python ' + os.path.basename(temp_py.name)  + ' < /Users/rahul_peter/Documents/webdev-practice/feetCode/items/inp.txt > /Users/rahul_peter/Documents/webdev-practice/feetCode/items/out.txt', shell = True)
         
         actual_outstring = ""
         outstring = ""
