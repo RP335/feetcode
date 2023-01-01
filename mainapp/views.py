@@ -74,10 +74,10 @@ def submit(request, problem_id):
     print(strPath)
     if (language == "Java"):
         if s.find(str.encode('java-container')) == -1:
-            subprocess.run(f'docker run -d -it --name java-container -v {strPath}:/home/:ro openjdk', shell=True)
+            subprocess.run(f'docker run -d -it --name java-container --stop-timeout 3 -v {strPath}:/home/:ro openjdk', shell=True)
     if (language == "Python"):
         if s.find(str.encode('python-container')) == -1:
-            subprocess.run(f'docker run -d -it --name python-container -v {strPath}:/home/:ro python', shell=True)     
+            subprocess.run(f'docker run -d -it --name python-container --stop-timeout 3 -v {strPath}:/home/:ro python', shell=True)     
 
     print("test1")
     strPath = os.getcwd()
